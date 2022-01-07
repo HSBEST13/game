@@ -10,10 +10,10 @@ class Hero(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 200
         self.rect.y = 600 - self.image.get_rect()[3]
-        self.jump_flag = False
+        self.jump_flag = False  # Флаг и счетчик для прыжков
         self.jump_count = 200
-        self.right = False
-        self.left = False
+        self.right = False  # Флаг для движения вправо
+        self.left = False  # Флаг для движения влево
 
     def left_(self):
         self.right = False
@@ -39,7 +39,7 @@ class Hero(pygame.sprite.Sprite):
             if self.jump_count == 0:
                 self.jump_count = 200
                 self.jump_flag = False
-            if 0 < self.jump_count <= 100:
+            if 0 < self.jump_count <= 100:  # Если вдруг счетчик стал меньше или равен половине, то он падает
                 self.rect.y += 1
             else:
                 self.rect.y -= 1
