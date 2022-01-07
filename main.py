@@ -7,7 +7,7 @@ screen = pygame.display.set_mode(size)
 
 if __name__ == "__main__":
     jump_flag = False
-    jump_count = 40
+    jump_count = 200
     sprites = pygame.sprite.Group()
     hero = pygame.sprite.Sprite(sprites)
     hero.image = pygame.image.load("data//images//hero//right.png")
@@ -34,10 +34,10 @@ if __name__ == "__main__":
         screen.fill((0, 0, 0))
         if jump_flag:
             if jump_count == 0:
-                jump_count = 40
+                jump_count = 200
                 jump_flag = False
                 continue
-            if jump_count <= 20:
+            if jump_count <= 100:
                 hero.rect.y += 1
             else:
                 hero.rect.y -= 1
