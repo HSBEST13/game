@@ -1,14 +1,14 @@
 import pygame
-import data
 from data.classes.hero import Hero  # Класс с главным героем
+from data.classes.button import Button  # Класс с кнопками
 
 pygame.init()
 size = width, height = 1000, 600
 screen = pygame.display.set_mode(size)
 
-
 if __name__ == "__main__":
     sprites = pygame.sprite.Group()  # Группа спрайтов
+    buttons = pygame.sprite.Group()  # Группа кнопок
     hero = Hero(sprites)
     fps = 200
     clock = pygame.time.Clock()
@@ -26,6 +26,8 @@ if __name__ == "__main__":
         screen.fill((0, 0, 0))
         sprites.draw(screen)
         sprites.update()
+        buttons.draw(screen)
+        buttons.update(pygame.event.get())
         clock.tick(fps)
         pygame.display.flip()
     pygame.quit()
