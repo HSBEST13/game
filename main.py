@@ -1,6 +1,7 @@
 import pygame
 from data.classes.hero import Hero  # Класс с главным героем
 from data.classes.button import Button  # Класс с кнопками
+from data.classes.dialog import DialogWindow, DialogButtonExit
 
 pygame.init()
 size = width, height = 1000, 600
@@ -10,6 +11,8 @@ if __name__ == "__main__":
     sprites = pygame.sprite.Group()  # Группа спрайтов
     buttons = pygame.sprite.Group()  # Группа кнопок
     hero = Hero(sprites)
+    dialog = DialogWindow(sprites)
+    dialog.set_parameters(50, 50, 100, 200, (213, 4, 121))
     fps = 200
     clock = pygame.time.Clock()
     running = True

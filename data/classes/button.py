@@ -7,8 +7,6 @@ class Button(pygame.sprite.Sprite):
 
     def set_parameters(self, x, y, width, height, text="", smart_color=(0, 0, 0),
                        hover_color=(0, 0, 0)):  # Установка параметров вне иницилизации
-        self.height = height
-        self.width = width
         self.text = text
         self.smart_image = pygame.Surface((width, height))
         self.smart_image.fill(smart_color)
@@ -21,5 +19,5 @@ class Button(pygame.sprite.Sprite):
 
     def update(self, events):
         self.image = self.smart_image
-        if self.rect.collidepoint(pygame.mouse.get_pos()):  # Смена цвета
+        if self.rect.collidepoint(pygame.mouse.get_pos()):  # Смена цвета при наведении на кнопку
             self.image = self.hover_image
