@@ -10,10 +10,14 @@ size = width, height = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.u
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 
 if __name__ == "__main__":
+    pygame.mouse.set_visible(False)
     sprites = pygame.sprite.Group()  # Группа спрайтов
     buttons = pygame.sprite.Group()  # Группа кнопок
     dialog_parts = pygame.sprite.Group()  # Диалоговое окно
     hero = Hero(sprites)  # Спрайт главного героя
+    cursor = pygame.sprite.Sprite(sprites)
+    cursor.image = pygame.image.load("data//images//buttons and windows//cursor.png")
+    cursor.rect = cursor.image.get_rect()
     dialog_btn = DialogButtonExit(dialog_parts)
     dialog_btn.set_pos(120, 50)
     fps = 200
@@ -21,13 +25,13 @@ if __name__ == "__main__":
     running = True
     main_music = pygame.mixer.Sound("data//music//main_window.wav")
     shoot_music = pygame.mixer.Sound("data//music//shoot.wav")
-    main_music.play()
+    main_music.play(-1)
     while running:
-        if pygame.key.get_pressed()[pygame.K_LEFT]:  # Бег влево
+        if pygame.key.get_pressed()[pygame.K_a]:  # Бег влево
             hero.left_()
-        if pygame.key.get_pressed()[pygame.K_RIGHT]:  # Бег вправо
+        if pygame.key.get_pressed()[pygame.K_d]:  # Бег вправо
             hero.right_()
-        if pygame.key.get_pressed()[pygame.K_UP]:  # Прыжок
+        if pygame.key.get_pressed()[pygame.K_w]:  # Прыжок
             hero.jump()
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # Если игрок esc нажал, то заходит в меню
             dialog_btn.set_flag()
@@ -35,9 +39,11 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                shoot_music.play()
                 dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-            if event.type == pygame.MOUSEBUTTONUP:
-
+            if event.type == pygame.MOUSEMOTION:
+                cursor.rect.x = pygame.mouse.get_pos()[0]
+                cursor.rect.y = pygame.mouse.get_pos()[1]
         screen.fill((0, 0, 0))
         sprites.draw(screen)  # Обновление всего
         sprites.update()
