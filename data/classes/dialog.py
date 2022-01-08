@@ -1,9 +1,9 @@
 import pygame
 
-show_flag = True
+show_flag = False  # Общий флаг для всех диалоговых окон
 
 
-class DialogWindow(pygame.sprite.Sprite):
+class DialogWindow(pygame.sprite.Sprite):  # Класс самого окна
     def __init__(self, *group):
         super().__init__(*group)
 
@@ -23,20 +23,26 @@ class DialogWindow(pygame.sprite.Sprite):
             self.image = self.field
 
 
-class DialogButtonExit(pygame.sprite.Sprite):
+class DialogButtonExit(pygame.sprite.Sprite):  # Класс кнопки закрытия окна
     def __init__(self, *group):
         super().__init__(*group)
         self.image_exit = pygame.image.load("data//images//buttons and windows//button_exit.png")
         self.image = self.image_exit
         self.hidden_img = pygame.Surface((0, 0))
         self.rect = self.image.get_rect()
-        self.rect.x = 120
-        self.rect.y = 50
+
+    def set_pos(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
 
     def check_click(self, x, y):
         global show_flag
         if self.rect.collidepoint(x, y):
             show_flag = False
+
+    def set_flag(self):
+        global show_flag
+        show_flag = True
 
     def update(self):
         global show_flag
