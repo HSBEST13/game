@@ -3,6 +3,7 @@ import ctypes
 from data.classes.hero import Hero  # Класс с главным героем
 from data.classes.button import Button  # Класс с кнопками
 from data.classes.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
+from data.classes.landscape import Landscape
 
 pygame.init()
 pygame.mixer.init()
@@ -15,6 +16,8 @@ if __name__ == "__main__":
     buttons = pygame.sprite.Group()  # Группа кнопок
     dialog_parts = pygame.sprite.Group()  # Диалоговое окно
     hero = Hero(sprites)  # Спрайт главного героя
+    hero.set_visible(False)
+    land = Landscape(sprites)
     cursor = pygame.sprite.Sprite(sprites)
     cursor.image = pygame.image.load("data//images//buttons and windows//cursor.png")
     cursor.rect = cursor.image.get_rect()
@@ -41,6 +44,7 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 shoot_music.play()
                 dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+                hero.set_visible(True)
             if event.type == pygame.MOUSEMOTION:
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]

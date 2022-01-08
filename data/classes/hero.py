@@ -11,6 +11,8 @@ class Hero(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 200
         self.rect.y = ctypes.windll.user32.GetSystemMetrics(1) - self.image.get_rect()[3]
+        self.right_image = pygame.image.load("data//images//hero//right.png")
+        self.left_image = pygame.image.load("data//images//hero//left.png")
         self.jump_flag = False  # Флаг и счетчик для прыжков
         self.jump_count = 200
         self.right = False  # Флаг для движения вправо
@@ -27,16 +29,23 @@ class Hero(pygame.sprite.Sprite):
     def jump(self):
         self.jump_flag = True
 
+    def set_visible(self, visible=True):
+        self.visible = visible
+
     def update(self):
-        if self.right:  # Если правая кнопка
-            self.rect.x += 1
-            self.image = pygame.image.load("data//images//hero//right.png")
+        if not self.visible:
+            self.image = pygame.Surface((0, 0))
+        else:
+            self.image = self.right_image
+        if self.right and self.visible:  # Если правая кнопка
+            self.rect.x += 5
+            self.image = self.right_image
             self.right = False
-        if self.left:  # Если левая кнопка
-            self.image = pygame.image.load("data//images//hero//left.png")
-            self.rect.x -= 1
+        if self.left and self.visible:  # Если левая кнопка
+            self.image = self.left_image
+            self.rect.x -= 5
             self.left = False
-        if self.jump_flag:  # Прыжок
+        if self.jump_flag and self.visible:  # Прыжок
             if self.jump_count == 0:
                 self.jump_count = 200
                 self.jump_flag = False
