@@ -35,7 +35,7 @@ if __name__ == "__main__":
             hero.left_()
         if pygame.key.get_pressed()[pygame.K_d]:  # Бег вправо
             hero.right_()
-        if pygame.key.get_pressed()[pygame.K_w]:  # Прыжок
+        if pygame.key.get_pressed()[pygame.K_w] or pygame.key.get_pressed()[pygame.K_SPACE]:  # Прыжок
             hero.jump()
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # Если игрок esc нажал, то заходит в меню
             dialog_btn.set_flag()
