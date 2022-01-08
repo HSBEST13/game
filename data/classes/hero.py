@@ -41,7 +41,7 @@ class Hero(pygame.sprite.Sprite):
                 self.jump_count = 200
                 self.jump_flag = False
             if 0 < self.jump_count <= 100:  # Если вдруг счетчик стал меньше или равен половине, то он падает
-                self.rect.y += 1
+                self.rect.y += 5
             else:
-                self.rect.y -= 1
-            self.jump_count -= 1
+                self.rect.y -= 5
+            self.jump_count -= 5

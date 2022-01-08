@@ -20,7 +20,7 @@ if __name__ == "__main__":
     cursor.rect = cursor.image.get_rect()
     dialog_btn = DialogButtonExit(dialog_parts)
     dialog_btn.set_pos(120, 50)
-    fps = 200
+    fps = 60
     clock = pygame.time.Clock()
     running = True
     main_music = pygame.mixer.Sound("data//music//main_window.wav")
@@ -45,12 +45,12 @@ if __name__ == "__main__":
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]
         screen.fill((0, 0, 0))
-        sprites.draw(screen)  # Обновление всего
+        dialog_parts.draw(screen)  # Обновление всего
+        dialog_parts.update()
+        sprites.draw(screen)
         sprites.update()
         buttons.draw(screen)
         buttons.update(pygame.event.get())
-        dialog_parts.draw(screen)
-        dialog_parts.update()
         clock.tick(fps)
         pygame.display.flip()
     pygame.quit()
