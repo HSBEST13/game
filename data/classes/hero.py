@@ -29,23 +29,16 @@ class Hero(pygame.sprite.Sprite):
     def jump(self):
         self.jump_flag = True
 
-    def set_visible(self, visible=True):
-        self.visible = visible
-
     def update(self):
-        if not self.visible:
-            self.image = pygame.Surface((0, 0))
-        else:
-            self.image = self.right_image
-        if self.right and self.visible:  # Если правая кнопка
+        if self.right:  # Если правая кнопка
             self.rect.x += 5
             self.image = self.right_image
             self.right = False
-        if self.left and self.visible:  # Если левая кнопка
+        if self.left:  # Если левая кнопка
             self.image = self.left_image
             self.rect.x -= 5
             self.left = False
-        if self.jump_flag and self.visible:  # Прыжок
+        if self.jump_flag:  # Прыжок
             if self.jump_count == 0:
                 self.jump_count = 200
                 self.jump_flag = False

@@ -16,7 +16,6 @@ if __name__ == "__main__":
     buttons = pygame.sprite.Group()  # Группа кнопок
     dialog_parts = pygame.sprite.Group()  # Диалоговое окно
     hero = Hero(sprites)  # Спрайт главного героя
-    hero.set_visible(False)
     block = Block(sprites)
     land = Landscape(sprites)
     cursor = pygame.sprite.Sprite(sprites)
@@ -52,13 +51,17 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 shoot_music.play()
                 dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-                hero.set_visible(True)
+                block.set_block()
             if event.type == pygame.MOUSEMOTION:
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]
-        block.set_pos(hero.rect.x, hero.rect.y, hero.left)
+        block.set_pos(hero.rect.x, hero.rect.y, hero.left, hero.right)
+        blocks = land.blocks_to_return()
         screen.fill((0, 0, 0))
+        hero_collide = pygame.sprite.spritecollide(hero, blocks, False)
         dialog_parts.draw(screen)  # Обновление всего
+        blocks.draw(screen)
+        blocks.update()
         dialog_parts.update()
         sprites.draw(screen)
         sprites.update()
