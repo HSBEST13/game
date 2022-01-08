@@ -1,4 +1,5 @@
 import pygame
+import data
 from data.classes.hero import Hero  # Класс с главным героем
 
 pygame.init()
@@ -9,7 +10,7 @@ screen = pygame.display.set_mode(size)
 if __name__ == "__main__":
     sprites = pygame.sprite.Group()  # Группа спрайтов
     hero = Hero(sprites)
-    fps = 100
+    fps = 200
     clock = pygame.time.Clock()
     running = True
     while running:
