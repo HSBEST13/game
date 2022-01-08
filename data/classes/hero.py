@@ -1,4 +1,5 @@
 import pygame
+import ctypes
 
 
 class Hero(pygame.sprite.Sprite):
@@ -9,7 +10,7 @@ class Hero(pygame.sprite.Sprite):
         self.image = Hero.image
         self.rect = self.image.get_rect()
         self.rect.x = 200
-        self.rect.y = 600 - self.image.get_rect()[3]
+        self.rect.y = ctypes.windll.user32.GetSystemMetrics(1) - self.image.get_rect()[3]
         self.jump_flag = False  # Флаг и счетчик для прыжков
         self.jump_count = 200
         self.right = False  # Флаг для движения вправо
