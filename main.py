@@ -5,6 +5,7 @@ from data.classes.button import Button  # Класс с кнопками
 from data.classes.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
 
 pygame.init()
+pygame.mixer.init()
 size = width, height = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1)
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 
@@ -18,6 +19,8 @@ if __name__ == "__main__":
     fps = 200
     clock = pygame.time.Clock()
     running = True
+    pygame.mixer.music.load("data//music//main_window.mp3")
+    pygame.mixer.music.play(-1)
     while running:
         if pygame.key.get_pressed()[pygame.K_LEFT]:  # Бег влево
             hero.left_()
