@@ -19,8 +19,9 @@ if __name__ == "__main__":
     fps = 200
     clock = pygame.time.Clock()
     running = True
-    pygame.mixer.music.load("data//music//main_window.mp3")
-    pygame.mixer.music.play(-1)
+    main_music = pygame.mixer.Sound("data//music//main_window.wav")
+    shoot_music = pygame.mixer.Sound("data//music//shoot.wav")
+    main_music.play()
     while running:
         if pygame.key.get_pressed()[pygame.K_LEFT]:  # Бег влево
             hero.left_()
@@ -35,6 +36,8 @@ if __name__ == "__main__":
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+            if event.type == pygame.MOUSEBUTTONUP:
+
         screen.fill((0, 0, 0))
         sprites.draw(screen)  # Обновление всего
         sprites.update()
