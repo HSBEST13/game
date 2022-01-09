@@ -17,9 +17,6 @@ class StaticBlock(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-    def update(self):
-        pass
-
 
 class Landscape(pygame.sprite.Sprite):
     def __init__(self, *group):
@@ -54,6 +51,3 @@ class Block(pygame.sprite.Sprite):
         x = self.rect.x
         y = self.rect.y
         StaticBlock()
-
-    def update(self):
-        pass

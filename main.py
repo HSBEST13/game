@@ -59,9 +59,7 @@ if __name__ == "__main__":
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # Если игрок esc нажал, то заходит в меню
             dialog_btn.set_flag()
         if pygame.sprite.spritecollide(hero, land.blocks_to_return(), False):
-            hero.collide_false()
-        else:
-            hero.collide_true()
+            hero.collide()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
