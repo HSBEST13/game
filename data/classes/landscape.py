@@ -11,8 +11,8 @@ y = 0
 class StaticBlock(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(blocks)
-        self.image = pygame.Surface((80, 20))
-        self.image.fill((77, 34, 14))
+        self.image = pygame.image.load("data//images//game//block.png")
+
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

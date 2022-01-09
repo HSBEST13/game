@@ -36,6 +36,8 @@ if __name__ == "__main__":
     shoot_music = pygame.mixer.Sound("data//music//shoot.wav")
     game_music = pygame.mixer.Sound("data//music//game_music.wav")
     main_music.play(-1)
+    background_image = pygame.image.load("data/images/buttons and windows/background.gif")
+    screen.blit(background_image, (0, 0))
     while running:
         if pygame.key.get_pressed()[pygame.K_a]:  # Бег влево
             hero.left_()
@@ -58,6 +60,7 @@ if __name__ == "__main__":
         block.set_pos(hero.rect.x, hero.rect.y, hero.left, hero.right)
         blocks = land.blocks_to_return()
         screen.fill((0, 0, 0))
+        screen.blit(background_image, (0, 0))
         hero_collide = pygame.sprite.spritecollide(hero, blocks, False)
         dialog_parts.draw(screen)  # Обновление всего
         blocks.draw(screen)
