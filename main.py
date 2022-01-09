@@ -3,7 +3,7 @@ import ctypes
 from data.classes.hero import Hero  # Класс с главным героем
 from data.classes.button import Button  # Класс с кнопками
 from data.classes.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
-from data.classes.landscape import Landscape, Block
+from data.classes.landscape import Landscape, Block  # Класс с ландшафтом и блоком
 
 pygame.init()
 pygame.mixer.init()
@@ -11,34 +11,45 @@ size = width, height = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.u
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
 
 if __name__ == "__main__":
-    pygame.mouse.set_visible(False)
+    """Инициализация групп спрайтов"""
     sprites = pygame.sprite.Group()  # Группа спрайтов
     buttons = pygame.sprite.Group()  # Группа кнопок
     dialog_parts = pygame.sprite.Group()  # Диалоговое окно
     hero = Hero(sprites)  # Спрайт главного героя
-    block = Block(sprites)
-    land = Landscape(sprites)
-    cursor = pygame.sprite.Sprite(sprites)
+
+    """Спрайты"""
+    pygame.mouse.set_visible(False)
+    cursor = pygame.sprite.Sprite(sprites)  # Спрайт мыши
     cursor.image = pygame.image.load("data//images//buttons and windows//cursor.png")
     cursor.rect = cursor.image.get_rect()
-    dialog_window = DialogWindow(dialog_parts)
+
+    block = Block(sprites)  # Создание блока - подсказки
+
+    land = Landscape(sprites)  # Спрайт, отвечающий за землю
+    background_image = pygame.image.load("data/images/buttons and windows/background.gif")  # Картинка на фоне игры
+
+    # Настройка и создание диалогового окна из частей
+    dialog_window = DialogWindow(dialog_parts)  # Диалоговое окно
     dialog_window.set_parameters(x=ctypes.windll.user32.GetSystemMetrics(0) // 2 - 100,
                                  y=ctypes.windll.user32.GetSystemMetrics(1) // 2 - 200,
                                  width=200, height=400,
                                  background_color=(100, 102, 100))
-    dialog_btn = DialogButtonExit(dialog_parts)
+
+    dialog_btn = DialogButtonExit(dialog_parts)  # Кнопка выхода из диалогового окна
     dialog_btn.set_pos(x=ctypes.windll.user32.GetSystemMetrics(0) // 2 + 70,
                        y=ctypes.windll.user32.GetSystemMetrics(1) // 2 - 200)
+
+    """Инициализация музыки"""
+    main_music = pygame.mixer.Sound("data//music//main_window.wav")  # Музыка диалоговых окон и главного меню
+    shoot_music = pygame.mixer.Sound("data//music//shoot.wav")  # Звук выстрела
+    game_music = pygame.mixer.Sound("data//music//game_music.wav")  # Музыка игры на фоне
+    main_music.play(-1)  # Запуск главной музыки
+
+    """Игра"""
     fps = 60
     clock = pygame.time.Clock()
     running = True
-    main_music = pygame.mixer.Sound("data//music//main_window.wav")
-    shoot_music = pygame.mixer.Sound("data//music//shoot.wav")
-    game_music = pygame.mixer.Sound("data//music//game_music.wav")
-    main_music.play(-1)
-    background_image = pygame.image.load("data/images/buttons and windows/background.gif")
-    screen.blit(background_image, (0, 0))
-    while running:
+    while running:  # Цикл игры
         if pygame.key.get_pressed()[pygame.K_a]:  # Бег влево
             hero.left_()
         if pygame.key.get_pressed()[pygame.K_d]:  # Бег вправо
@@ -47,6 +58,10 @@ if __name__ == "__main__":
             hero.jump()
         if pygame.key.get_pressed()[pygame.K_ESCAPE]:  # Если игрок esc нажал, то заходит в меню
             dialog_btn.set_flag()
+        if pygame.sprite.spritecollide(hero, land.blocks_to_return(), False):
+            hero.collide_false()
+        else:
+            hero.collide_true()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -59,9 +74,7 @@ if __name__ == "__main__":
                 cursor.rect.y = pygame.mouse.get_pos()[1]
         block.set_pos(hero.rect.x, hero.rect.y, hero.left, hero.right)
         blocks = land.blocks_to_return()
-        screen.fill((0, 0, 0))
         screen.blit(background_image, (0, 0))
-        hero_collide = pygame.sprite.spritecollide(hero, blocks, False)
         dialog_parts.draw(screen)  # Обновление всего
         blocks.draw(screen)
         blocks.update()

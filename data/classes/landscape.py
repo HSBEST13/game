@@ -11,8 +11,8 @@ y = 0
 class StaticBlock(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(blocks)
-        self.image = pygame.image.load("data//images//game//block.png")
-
+        self.image = pygame.Surface((80, 20))
+        self.image.fill((77, 34, 14))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -25,7 +25,7 @@ class Landscape(pygame.sprite.Sprite):
     def __init__(self, *group):
         super().__init__(*group)
         self.image = pygame.Surface((ctypes.windll.user32.GetSystemMetrics(0), 20))
-        self.image.fill((77, 34, 14))
+        self.image.fill((127, 48, 46))
         self.rect = self.image.get_rect()
         self.rect.x = 0
         self.rect.y = ctypes.windll.user32.GetSystemMetrics(1) - 20
@@ -53,7 +53,7 @@ class Block(pygame.sprite.Sprite):
         global x, y
         x = self.rect.x
         y = self.rect.y
-        new = StaticBlock()
+        StaticBlock()
 
     def update(self):
         pass

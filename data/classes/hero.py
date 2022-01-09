@@ -17,6 +17,7 @@ class Hero(pygame.sprite.Sprite):
         self.jump_count = 200
         self.right = False  # Флаг для движения вправо
         self.left = False  # Флаг для движения влево
+        self.collide_flag = True
 
     def left_(self):
         self.right = False
@@ -25,6 +26,12 @@ class Hero(pygame.sprite.Sprite):
     def right_(self):
         self.right = True
         self.left = False
+
+    def collide_true(self):
+        self.collide_flag = True
+
+    def collide_false(self):
+        self.collide_flag = False
 
     def jump(self):
         self.jump_flag = True
@@ -38,7 +45,7 @@ class Hero(pygame.sprite.Sprite):
             self.image = self.left_image
             self.rect.x -= 5
             self.left = False
-        if self.jump_flag:  # Прыжок
+        if self.jump_flag and self.collide_flag:  # Прыжок
             if self.jump_count == 0:
                 self.jump_count = 200
                 self.jump_flag = False
