@@ -1,5 +1,6 @@
 import pygame
 import ctypes
+import pymunk.pygame_util
 
 blocks = pygame.sprite.Group()
 
@@ -46,8 +47,23 @@ class Block(pygame.sprite.Sprite):
             self.rect.x = x_ + 220
         self.rect.y = y_ + 200
 
+    def get_pos(self):
+        return [self.rect.x, self.rect.y]
+
     def set_block(self):
         global x, y
         x = self.rect.x
         y = self.rect.y
         StaticBlock()
+
+
+def create_square(space, pos):
+    square_mass, square_size = 1, (60, 60)
+    square_moment = pymunk.moment_for_box(square_mass, square_size)
+    square_body = pymunk.Body(square_mass, square_moment)
+    square_body.position = pos
+    square_shape = pymunk.Poly.create_box(square_body, square_size)
+    square_shape.elasticity = 0.4
+    square_shape.friction = 1.0
+    square_shape.color = (77, 34, 14, 255)
+    space.add(square_body, square_shape)

@@ -20,6 +20,9 @@ class Hero(pygame.sprite.Sprite):
         self.collide_flag = False
         self.two = True
 
+    def get_pos(self):
+        return [self.rect.x, self.rect.y]
+
     def left_(self):
         self.right = False
         self.left = True
@@ -35,10 +38,6 @@ class Hero(pygame.sprite.Sprite):
         self.jump_flag = True
 
     def update(self):
-        if self.collide_flag and self.two:
-            if self.rect.y != ctypes.windll.user32.GetSystemMetrics(1) - self.image.get_rect()[3]:
-                self.jump_flag = False
-                self.two = False
         if self.right:  # Если правая кнопка
             self.rect.x += 5
             self.image = self.right_image
@@ -49,7 +48,7 @@ class Hero(pygame.sprite.Sprite):
             self.left = False
         if self.jump_flag:  # Прыжок
             if self.jump_count == 0:
-                self.jump_cowunt = 200
+                self.jump_count = 200
                 self.jump_flag = False
             if 0 < self.jump_count <= 100:  # Если вдруг счетчик стал меньше или равен половине, то он падает
                 self.rect.y += 5
