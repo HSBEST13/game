@@ -1,5 +1,6 @@
 import pygame
 import ctypes
+import time
 from data.objects.hero import Hero  # Класс с главным героем
 from data.objects.button import Button  # Класс с кнопками
 from data.objects.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
@@ -16,12 +17,21 @@ if __name__ == "__main__":
     sprites = pygame.sprite.Group()  # Группа спрайтов
     buttons = pygame.sprite.Group()  # Группа кнопок
     dialog_parts = pygame.sprite.Group()  # Диалоговое окно
-    hero = Hero(sprites)  # Спрайт главного героя
-    monster = Monster(sprites)
+    monsters = pygame.sprite.Group()  # Враги
+    cursor_group = pygame.sprite.Group()  # Курсор
 
     """Спрайты"""
+    hero = Hero(sprites)  # Спрайт главного героя
+    start_button = Button(buttons)
+    start_button.set_parameters(image_url="data//images//buttons and windows//start.png",  # Кнопка старта
+                                hover_image_url="data//images//buttons and windows//start_hover.png",
+                                x=ctypes.windll.user32.GetSystemMetrics(0) // 2 - 300,
+                                y=ctypes.windll.user32.GetSystemMetrics(1) // 2 - 100)
+    multiplayer_btn = Button()
+    multiplayer_btn.set_parameters()
+
     pygame.mouse.set_visible(False)
-    cursor = pygame.sprite.Sprite(sprites)  # Спрайт мыши
+    cursor = pygame.sprite.Sprite(cursor_group)  # Спрайт мыши
     cursor.image = pygame.image.load("data//images//buttons and windows//cursor.png")
     cursor.rect = cursor.image.get_rect()
 
@@ -51,6 +61,8 @@ if __name__ == "__main__":
     fps = 60
     clock = pygame.time.Clock()
     running = True
+    start_window = True
+    start_time = time.time()
     while running:  # Цикл игры
         if pygame.key.get_pressed()[pygame.K_a]:  # Бег влево
             hero.left_()
@@ -71,18 +83,26 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEMOTION:
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]
-        monster.set_hero_pos(hero.rect.x, hero.rect.y)
         block.set_pos(hero.rect.x, hero.rect.y, hero.left, hero.right)
         blocks = land.blocks_to_return()
         screen.fill((0, 0, 0))
         """screen.blit(background_image, (0, 0))"""
-        dialog_parts.draw(screen)  # Обновление всего
-        blocks.update()
-        dialog_parts.update()
-        sprites.draw(screen)
-        sprites.update()
-        buttons.draw(screen)
-        buttons.update(pygame.event.get())
+        if start_window:  # Обновление всего
+            buttons.draw(screen)
+            buttons.update(pygame.event.get())
+        else:
+            dialog_parts.draw(screen)
+            blocks.update()
+            monsters.draw(screen)
+            monsters.update(hero.rect.x, hero.rect.y)
+            dialog_parts.update()
+            sprites.draw(screen)
+            sprites.update()
+        cursor_group.draw(screen)
+        cursor_group.update()
         clock.tick(fps)
         pygame.display.flip()
+        if time.time() - start_time >= 10:
+            Monster(monsters)
+            start_time = time.time()
     pygame.quit()
