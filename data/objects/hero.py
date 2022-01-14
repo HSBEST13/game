@@ -19,6 +19,7 @@ class Hero(pygame.sprite.Sprite):
         self.left = False  # Флаг для движения влево
         self.collide_flag = False
         self.two = True
+        self.flag = True
 
     def get_pos(self):
         return [self.rect.x, self.rect.y]

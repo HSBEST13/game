@@ -1,26 +1,15 @@
 import pygame
 import ctypes
-import pymunk.pygame_util
-from data.classes.hero import Hero  # Класс с главным героем
-from data.classes.button import Button  # Класс с кнопками
-from data.classes.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
-from data.classes.landscape import Landscape, Block, create_square  # Класс с ландшафтом и блоком
+from data.objects.hero import Hero  # Класс с главным героем
+from data.objects.button import Button  # Класс с кнопками
+from data.objects.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
+from data.objects.landscape import Landscape, Block  # Класс с ландшафтом и блоком
+from data.objects.monster import Monster
 
 pygame.init()
 pygame.mixer.init()
 size = width, height = ctypes.windll.user32.GetSystemMetrics(0), ctypes.windll.user32.GetSystemMetrics(1)
 screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
-draw_options = pymunk.pygame_util.DrawOptions(screen)
-pymunk.pygame_util.positive_y_is_up = False
-
-"""Настройки гравитации и физики"""
-space = pymunk.Space()
-space.gravity = 0, 8000
-body = pymunk.Body()
-segment_shape = pymunk.Segment(space.static_body, (2, height), (width, height), 26)
-space.add(segment_shape)
-segment_shape.elasticity = 0.8
-segment_shape.friction = 1.0
 
 if __name__ == "__main__":
     """Инициализация групп спрайтов"""
@@ -28,15 +17,7 @@ if __name__ == "__main__":
     buttons = pygame.sprite.Group()  # Группа кнопок
     dialog_parts = pygame.sprite.Group()  # Диалоговое окно
     hero = Hero(sprites)  # Спрайт главного героя
-    hero_mass, hero_size = 1, (209, 269)
-    hero_moment = pymunk.moment_for_box(hero_mass, hero_size)
-    hero_body = pymunk.Body(hero_mass, hero_moment)
-    hero_body.position = [hero.get_pos()[0] - 100, hero.get_pos()[1] - 50]
-    hero_shape = pymunk.Poly.create_box(hero_body, hero_size)
-    hero_shape.elasticity = 0
-    hero_shape.friction = 1
-    hero_shape.color = (144, 0, 0, 0)
-    space.add(hero_body, hero_shape)
+    monster = Monster(sprites)
 
     """Спрайты"""
     pygame.mouse.set_visible(False)
@@ -87,24 +68,21 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 shoot_music.play()
                 dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-                create_square(space, block.get_pos())
             if event.type == pygame.MOUSEMOTION:
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]
+        monster.set_hero_pos(hero.rect.x, hero.rect.y)
         block.set_pos(hero.rect.x, hero.rect.y, hero.left, hero.right)
         blocks = land.blocks_to_return()
         screen.fill((0, 0, 0))
         """screen.blit(background_image, (0, 0))"""
         dialog_parts.draw(screen)  # Обновление всего
-        blocks.draw(screen)
         blocks.update()
         dialog_parts.update()
         sprites.draw(screen)
         sprites.update()
         buttons.draw(screen)
         buttons.update(pygame.event.get())
-        space.step(1 / fps)
-        space.debug_draw(draw_options)
         clock.tick(fps)
         pygame.display.flip()
     pygame.quit()
