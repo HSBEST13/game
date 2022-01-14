@@ -1,10 +1,10 @@
 import pygame
 import ctypes
 import time
-from data.objects.hero import Hero  # Класс с главным героем
+from data.objects.hero import Hero, HealthBar  # Класс с главным героем
 from data.objects.button import Button  # Класс с кнопками
 from data.objects.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
-from data.objects.landscape import Landscape, Block  # Класс с ландшафтом и блоком
+from data.objects.landscape import Landscape  # Класс с ландшафтом и блоком
 from data.objects.monster import Monster
 
 pygame.init()
@@ -22,6 +22,7 @@ if __name__ == "__main__":
 
     """Спрайты"""
     hero = Hero(sprites)  # Спрайт главного героя
+    bar = HealthBar(sprites)
     start_button = Button(buttons)
     start_button.set_parameters(image_url="data//images//buttons and windows//start.png",  # Кнопка старта
                                 hover_image_url="data//images//buttons and windows//start_hover.png",
@@ -91,14 +92,20 @@ if __name__ == "__main__":
                 dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
                 if start_button.image == start_button.hover_image:
                     start_window_2 = True
-                if singleplayer_btn.image == singleplayer_btn.hover_image:
+                if singleplayer_btn.image == singleplayer_btn.hover_image and start_window:
                     singleplayer = True
                     start_window = False
                     monsters.empty()
-                if multiplayer_btn.image == multiplayer_btn.hover_image:
+                    main_music.stop()
+                    game_music.play()
+                    buttons.empty()
+                if multiplayer_btn.image == multiplayer_btn.hover_image and start_window:
                     multiplayer = True
                     start_window = False
                     monsters.empty()
+                    main_music.stop()
+                    game_music.play()
+                    buttons.empty()
             if event.type == pygame.MOUSEMOTION:
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]
@@ -127,6 +134,10 @@ if __name__ == "__main__":
                 pass  # TODO multiplayer
         cursor_group.draw(screen)
         cursor_group.update()
+        for monster in monsters:
+            if monster.isuron():
+                hero.set_xp()
+        pygame.draw.rect(screen, (255, 0, 0), (50 + bar.return_hp(), 50, 200 - bar.return_hp(), 20))
         clock.tick(fps)
         pygame.display.flip()
         if time.time() - start_time >= 10:

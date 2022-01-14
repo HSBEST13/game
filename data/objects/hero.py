@@ -1,6 +1,8 @@
 import pygame
 import ctypes
 
+hero_xp = 200
+
 
 class Hero(pygame.sprite.Sprite):
     image = pygame.image.load("data//images//hero//right.png")
@@ -23,6 +25,10 @@ class Hero(pygame.sprite.Sprite):
 
     def get_pos(self):
         return [self.rect.x, self.rect.y]
+
+    def set_xp(self):
+        global hero_xp
+        hero_xp -= 2
 
     def left_(self):
         self.right = False
@@ -56,3 +62,17 @@ class Hero(pygame.sprite.Sprite):
             else:
                 self.rect.y -= 5
             self.jump_count -= 5
+
+
+class HealthBar(pygame.sprite.Sprite):
+    def __init__(self, *group):
+        super().__init__(*group)
+        self.image = pygame.Surface((200, 20))
+        self.image.fill((255, 255, 0))
+        self.rect = self.image.get_rect()
+        self.rect.x = 50
+        self.rect.y = 50
+
+    def return_hp(self):
+        global hero_xp
+        return hero_xp
