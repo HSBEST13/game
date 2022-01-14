@@ -28,14 +28,20 @@ if __name__ == "__main__":
                                 x=ctypes.windll.user32.GetSystemMetrics(0) // 2 - 300,
                                 y=ctypes.windll.user32.GetSystemMetrics(1) // 2 - 100)
     multiplayer_btn = Button()
-    multiplayer_btn.set_parameters()
+    multiplayer_btn.set_parameters(image_url="data//images//buttons and windows//mp.png",
+                                   hover_image_url="data//images//buttons and windows//mp_hover.png",
+                                   x=ctypes.windll.user32.GetSystemMetrics(0) // 2 - 300,
+                                   y=ctypes.windll.user32.GetSystemMetrics(1) // 2 - 100)
+    singleplayer_btn = Button()
+    singleplayer_btn.set_parameters(image_url="data//images//buttons and windows//sp.png",
+                                    hover_image_url="data//images//buttons and windows//sp_hover.png",
+                                    x=ctypes.windll.user32.GetSystemMetrics(0) // 2 - 300,
+                                    y=ctypes.windll.user32.GetSystemMetrics(1) // 2 + 50)
 
     pygame.mouse.set_visible(False)
     cursor = pygame.sprite.Sprite(cursor_group)  # Спрайт мыши
     cursor.image = pygame.image.load("data//images//buttons and windows//cursor.png")
     cursor.rect = cursor.image.get_rect()
-
-    block = Block(sprites)  # Создание блока - подсказки
 
     land = Landscape(sprites)  # Спрайт, отвечающий за землю
     background_image = pygame.image.load("data/images/buttons and windows/background.gif")  # Картинка на фоне игры
@@ -62,6 +68,9 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     running = True
     start_window = True
+    start_window_2 = False
+    multiplayer = False
+    singleplayer = False
     start_time = time.time()
     while running:  # Цикл игры
         if pygame.key.get_pressed()[pygame.K_a]:  # Бег влево
@@ -80,24 +89,42 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 shoot_music.play()
                 dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+                if start_button.image == start_button.hover_image:
+                    start_window_2 = True
+                if singleplayer_btn.image == singleplayer_btn.hover_image:
+                    singleplayer = True
+                    start_window = False
+                    monsters.empty()
+                if multiplayer_btn.image == multiplayer_btn.hover_image:
+                    multiplayer = True
+                    start_window = False
+                    monsters.empty()
             if event.type == pygame.MOUSEMOTION:
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]
-        block.set_pos(hero.rect.x, hero.rect.y, hero.left, hero.right)
+
         blocks = land.blocks_to_return()
         screen.fill((0, 0, 0))
         """screen.blit(background_image, (0, 0))"""
         if start_window:  # Обновление всего
             buttons.draw(screen)
             buttons.update(pygame.event.get())
+            if start_window_2:
+                buttons.empty()
+                multiplayer_btn.add(buttons)
+                singleplayer_btn.add(buttons)
+                start_window_2 = False
         else:
-            dialog_parts.draw(screen)
-            blocks.update()
-            monsters.draw(screen)
-            monsters.update(hero.rect.x, hero.rect.y)
-            dialog_parts.update()
-            sprites.draw(screen)
-            sprites.update()
+            if singleplayer:
+                dialog_parts.draw(screen)
+                blocks.update()
+                monsters.draw(screen)
+                monsters.update(hero.rect.x, hero.rect.y)
+                dialog_parts.update()
+                sprites.draw(screen)
+                sprites.update()
+            else:
+                pass  # TODO multiplayer
         cursor_group.draw(screen)
         cursor_group.update()
         clock.tick(fps)
