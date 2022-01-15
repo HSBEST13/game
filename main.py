@@ -1,7 +1,7 @@
 import pygame
 import ctypes
 import time
-from data.objects.hero import Hero, HealthBar  # Класс с главным героем
+from data.objects.hero import Hero, HealthBar, Bullet  # Класс с главным героем
 from data.objects.button import Button  # Класс с кнопками
 from data.objects.dialog import DialogWindow, DialogButtonExit  # Классы с элементами для диалогового окна
 from data.objects.landscape import Landscape  # Класс с ландшафтом и блоком
@@ -19,6 +19,7 @@ if __name__ == "__main__":
     dialog_parts = pygame.sprite.Group()  # Диалоговое окно
     monsters = pygame.sprite.Group()  # Враги
     cursor_group = pygame.sprite.Group()  # Курсор
+    shoots = pygame.sprite.Group()  # Пули
 
     """Спрайты"""
     hero = Hero(sprites)  # Спрайт главного героя
@@ -92,6 +93,15 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if not start_window and start_window_2:
                     shoot_music.play()
+                    if hero.image == hero.right_image:
+                        h = Bullet(shoots)
+                        h.set_pos(hero.rect.x + 150, hero.rect.y + 150, False)
+                    else:
+                        h = Bullet(shoots)
+                        h.set_pos(hero.rect.x + 50, hero.rect.y + 150, True)
+                    for monster in monsters:
+                        if pygame.sprite.spritecollide(monster, shoots, False):
+                            monster.set_xp()
                     dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
                 if start_button.image == start_button.hover_image:
                     start_window_2 = True
@@ -132,6 +142,8 @@ if __name__ == "__main__":
                 dialog_parts.update()
                 sprites.draw(screen)
                 sprites.update()
+                shoots.draw(screen)
+                shoots.update()
                 if bar.is_died():
                     buttons.add(start_button)
                     start_window_2 = False
@@ -152,6 +164,6 @@ if __name__ == "__main__":
         clock.tick(fps)
         pygame.display.flip()
         if time.time() - start_time >= 10:
-            Monster(monsters)
+            k = Monster(monsters)
             start_time = time.time()
     pygame.quit()

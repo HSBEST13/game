@@ -2,6 +2,8 @@ import pygame
 import random
 import ctypes
 
+monster_xp = 100
+
 
 class Monster(pygame.sprite.Sprite):
     def __init__(self, *group):
@@ -15,12 +17,21 @@ class Monster(pygame.sprite.Sprite):
     def isuron(self):
         return self.uron
 
+    def set_xp(self):
+        global monster_xp
+        monster_xp -= 10
+
     def update(self, x, y):
-        if x != self.rect.x:
-            if x > self.rect.x:
-                self.rect.x += 2
-            else:
-                self.rect.x -= 2
-            self.uron = False
+        global monster_xp
+        if monster_xp == 0:
+            self.image = pygame.Surface((0, 0))
+            self.rect.y = 10000
         else:
-            self.uron = True
+            if x != self.rect.x:
+                if x > self.rect.x:
+                    self.rect.x += 2
+                else:
+                    self.rect.x -= 2
+                self.uron = False
+            else:
+                self.uron = True

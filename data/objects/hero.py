@@ -13,8 +13,8 @@ class Hero(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 200
         self.rect.y = ctypes.windll.user32.GetSystemMetrics(1) - self.image.get_rect()[3]
-        self.right_image = pygame.image.load("data//images//hero//right.png")
-        self.left_image = pygame.image.load("data//images//hero//left.png")
+        self.right_image = pygame.image.load("data//images//hero//right.png").convert_alpha()
+        self.left_image = pygame.image.load("data//images//hero//left.png").convert_alpha()
         self.jump_flag = False  # Флаг и счетчик для прыжков
         self.jump_count = 200
         self.right = False  # Флаг для движения вправо
@@ -86,3 +86,21 @@ class HealthBar(pygame.sprite.Sprite):
         global hero_xp
         hero_xp = 200
 
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, *group):
+        super(Bullet, self).__init__(*group)
+        self.image = pygame.Surface((20, 5))
+        self.rect = self.image.get_rect()
+        self.reverse = False
+
+    def update(self):
+        if self.reverse:
+            self.rect.x -= 20
+        else:
+            self.rect.x += 20
+
+    def set_pos(self, x, y, reverse):
+        self.rect.x = x
+        self.rect.y = y
+        self.reverse = reverse
