@@ -88,8 +88,9 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                shoot_music.play()
-                dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+                if not start_window and start_window_2:
+                    shoot_music.play()
+                    dialog_btn.check_click(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
                 if start_button.image == start_button.hover_image:
                     start_window_2 = True
                 if singleplayer_btn.image == singleplayer_btn.hover_image and start_window:
@@ -130,14 +131,22 @@ if __name__ == "__main__":
                 dialog_parts.update()
                 sprites.draw(screen)
                 sprites.update()
+                if bar.is_died():
+                    buttons.add(start_button)
+                    start_window_2 = False
+                    start_window = True
+                    singleplayer = False
+                for monster in monsters:
+                    if monster.isuron():
+                        hero.set_xp()
+                if bar.return_hp() >= 0:
+                    pygame.draw.rect(screen, (255, 0, 0), (50 + bar.return_hp(), 50, 200 - bar.return_hp(), 20))
+                else:
+                    pygame.draw.rect(screen, (255, 0, 0), (50, 50, 200, 20))
             else:
                 pass  # TODO multiplayer
         cursor_group.draw(screen)
         cursor_group.update()
-        for monster in monsters:
-            if monster.isuron():
-                hero.set_xp()
-        pygame.draw.rect(screen, (255, 0, 0), (50 + bar.return_hp(), 50, 200 - bar.return_hp(), 20))
         clock.tick(fps)
         pygame.display.flip()
         if time.time() - start_time >= 10:

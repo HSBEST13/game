@@ -28,7 +28,7 @@ class Hero(pygame.sprite.Sprite):
 
     def set_xp(self):
         global hero_xp
-        hero_xp -= 2
+        hero_xp -= 1
 
     def left_(self):
         self.right = False
@@ -76,3 +76,9 @@ class HealthBar(pygame.sprite.Sprite):
     def return_hp(self):
         global hero_xp
         return hero_xp
+
+    def is_died(self):
+        global hero_xp
+        if hero_xp <= 0:
+            return True
+
