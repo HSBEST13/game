@@ -82,3 +82,7 @@ class HealthBar(pygame.sprite.Sprite):
         if hero_xp <= 0:
             return True
 
+    def set_hp(self):
+        global hero_xp
+        hero_xp = 200
+

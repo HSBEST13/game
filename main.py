@@ -136,6 +136,8 @@ if __name__ == "__main__":
                     start_window_2 = False
                     start_window = True
                     singleplayer = False
+                    singleplayer_btn.image = singleplayer_btn.smart_image
+                    bar.set_hp()
                 for monster in monsters:
                     if monster.isuron():
                         hero.set_xp()
