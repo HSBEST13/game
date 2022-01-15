@@ -46,6 +46,8 @@ if __name__ == "__main__":
 
     land = Landscape(sprites)  # Спрайт, отвечающий за землю
     background_image = pygame.image.load("data/images/buttons and windows/background.gif")  # Картинка на фоне игры
+    background_image = pygame.transform.scale(background_image, (ctypes.windll.user32.GetSystemMetrics(0),
+                                                                 ctypes.windll.user32.GetSystemMetrics(1)))
 
     # Настройка и создание диалогового окна из частей
     dialog_window = DialogWindow(dialog_parts)  # Диалоговое окно
@@ -110,10 +112,9 @@ if __name__ == "__main__":
             if event.type == pygame.MOUSEMOTION:
                 cursor.rect.x = pygame.mouse.get_pos()[0]
                 cursor.rect.y = pygame.mouse.get_pos()[1]
-
         blocks = land.blocks_to_return()
         screen.fill((0, 0, 0))
-        """screen.blit(background_image, (0, 0))"""
+        screen.blit(background_image, (0, 0))
         if start_window:  # Обновление всего
             buttons.draw(screen)
             buttons.update(pygame.event.get())
@@ -138,9 +139,8 @@ if __name__ == "__main__":
                     singleplayer = False
                     singleplayer_btn.image = singleplayer_btn.smart_image
                     bar.set_hp()
-                for monster in monsters:
-                    if monster.isuron():
-                        hero.set_xp()
+                if pygame.sprite.spritecollide(hero, monsters, False):
+                    hero.set_xp()
                 if bar.return_hp() >= 0:
                     pygame.draw.rect(screen, (255, 0, 0), (50 + bar.return_hp(), 50, 200 - bar.return_hp(), 20))
                 else:
